@@ -19,5 +19,35 @@ def add_data(data):
         json_data.append(new_podcast)
         file.seek(0)
         json.dump(json_data, file, ensure_ascii=False)
-        file.truncate()
-        return data
+        file.truncate()        
+    
+def edit_data(id, data):
+    with open(FILENAME, 'r+', encoding="utf-8") as file:
+        json_data = json.load(file)
+        data = json.loads(data)               
+        podcastFound = [podcast for podcast in json_data if podcast['id'] == id]
+        if len(podcastFound) > 0:
+            podcastFound[0]['last_chapter'] = data['url']
+            file.seek(0)
+            json.dump(json_data, file, ensure_ascii=False)
+            file.truncate()
+            return podcastFound[0]
+        else:
+            return None
+
+def delete_data(id):
+    with open(FILENAME, 'r+', encoding="utf-8") as file:
+        json_data = json.load(file)                     
+        podcastFound = [podcast for podcast in json_data if podcast['id'] == id]
+        if len(podcastFound) > 0:
+            json_data.remove(podcastFound[0])
+            file.seek(0)
+            json.dump(json_data, file, ensure_ascii=False)
+            file.truncate()
+            return podcastFound[0]
+        else:
+            return None
+        
+        
+        
+        
